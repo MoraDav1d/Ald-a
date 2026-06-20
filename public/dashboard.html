@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Al Día</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <button class="btn btn-outline nav-circle-btn" id="menu-toggle" title="Menú lateral">☰</button>
+            <button class="btn btn-outline nav-circle-btn" id="theme-toggle" title="Cambiar Tema">🌙</button>
+            <span style="font-weight: 500; align-self: center;" id="user-greeting"></span>
+        </div>
+        <div class="nav-center">
+            <img src="img/logo.png" alt="Al Día" class="nav-logo" onclick="window.location.href='index.html'"
+                title="Ir al inicio">
+        </div>
+        <div class="nav-right" style="display: flex; align-items: center; gap: 0.8rem;">
+            <div class="nav-search-wrapper">
+                <svg class="search-icon-svg" viewBox="0 0 24 24" width="16" height="16" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="global-search-input" placeholder="Buscar..." class="form-control"
+                    autocomplete="off">
+                <kbd class="search-shortcut">Ctrl K</kbd>
+            </div>
+            <button id="btn-quick-add" class="btn btn-primary" title="Nueva Actividad Rápida">+</button>
+        </div>
+    </nav>
+
+    <aside id="sidebar-menu" class="sidebar hidden-sidebar">
+        <!-- Contenedor scrollable para enlaces y proyectos -->
+        <div class="sidebar-scrollable-content">
+            <div class="sidebar-header">
+                <h2>Menú</h2>
+                <button id="close-sidebar" class="btn btn-outline"
+                    style="border:none; font-size:1.5rem;">&times;</button>
+            </div>
+            <ul class="sidebar-links">
+                <li><a href="#" class="sidebar-link active" data-target="seccion-hoy">📅 Hoy</a></li>
+                <li><a href="#" class="sidebar-link" data-target="seccion-vencidas">⚠️ Vencidas</a></li>
+                <li><a href="#" class="sidebar-link" data-target="seccion-proximo">🔮 Próximo</a></li>
+                <li><a href="#" class="sidebar-link" data-target="seccion-reportes">📊 Reportes</a></li>
+            </ul>
+            <hr style="border-color: var(--glass-border); margin: 1rem 0;">
+            <div style="padding: 0 0.9rem 1rem 0.9rem;">
+                <h3 style="margin-bottom: 0.5rem; font-size: 1rem; color: var(--text-secondary);">Mis Proyectos</h3>
+                <!-- Botón de acción para desplegar la creación -->
+                <button id="btn-mostrar-crear-proyecto" class="btn btn-outline btn-sm"
+                    style="width: 100%; margin-bottom: 0.8rem; text-align: left; padding: 0.5rem; display: flex; align-items: center; justify-content: space-between; font-weight: 600; border-radius: 6px;">
+                    <span>➕ Nuevo Proyecto</span>
+                </button>
+
+                <form id="form-proyecto" class="hidden"
+                    style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; padding: 0.5rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--input-bg);">
+                    <input type="text" id="nombre-proyecto" placeholder="Nombre del proyecto" required
+                        class="form-control"
+                        style="width: 100%; padding: 0.4rem; border-radius: 4px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary); font-size: 0.85rem;">
+
+                    <div style="display: flex; gap: 0.4rem;">
+                        <select id="emoji-proyecto" class="form-control"
+                            style="flex: 1; min-width: 0; padding: 0.3rem; font-size: 0.85rem; border-radius: 4px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary);">
+                            <option value="📁">📁 Folder</option>
+                            <option value="🚀">🚀 Lanzamiento</option>
+                            <option value="💼">💼 Trabajo</option>
+                            <option value="🛒">🛒 Compras</option>
+                            <option value="📚">📚 Estudios</option>
+                            <option value="💻">💻 Programación</option>
+                            <option value="🎨">🎨 Diseño</option>
+                            <option value="🏠">🏠 Hogar</option>
+                            <option value="🔥">🔥 Metas</option>
+                            <option value="🎯">🎯 Enfoque</option>
+                        </select>
+                        <select id="color-proyecto" class="form-control"
+                            style="flex: 1; min-width: 0; padding: 0.3rem; font-size: 0.85rem; border-radius: 4px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary);">
+                            <option value="#3b82f6" style="color: #3b82f6; font-weight: bold;">🔵 Azul</option>
+                            <option value="#10b981" style="color: #10b981; font-weight: bold;">🟢 Verde</option>
+                            <option value="#f59e0b" style="color: #f59e0b; font-weight: bold;">🟡 Amarillo</option>
+                            <option value="#ef4444" style="color: #ef4444; font-weight: bold;">🔴 Rojo</option>
+                            <option value="#8b5cf6" style="color: #8b5cf6; font-weight: bold;">🟣 Morado</option>
+                            <option value="#ec4899" style="color: #ec4899; font-weight: bold;">💗 Rosa</option>
+                            <option value="#06b6d4" style="color: #06b6d4; font-weight: bold;">🔵 Cyan</option>
+                        </select>
+                    </div>
+
+                    <div style="display: flex; gap: 0.4rem;">
+                        <button type="submit" class="btn btn-primary btn-sm"
+                            style="flex: 1; padding: 0.3rem; font-size: 0.8rem;">Crear</button>
+                        <button type="button" id="btn-cancelar-crear-proyecto" class="btn btn-outline btn-sm"
+                            style="flex: 1; padding: 0.3rem; font-size: 0.8rem;">X</button>
+                    </div>
+                </form>
+                <div id="sidebar-proyectos-lista" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Fijo abajo: Perfil de Usuario -->
+        <div class="sidebar-profile">
+            <div class="profile-avatar" id="sidebar-avatar">U</div>
+            <div class="profile-info">
+                <span class="profile-name" id="sidebar-user-name">Cargando...</span>
+                <span class="profile-email" id="sidebar-user-email">cargando...</span>
+            </div>
+            <button id="sidebar-logout-btn" class="profile-logout-btn" title="Cerrar Sesión">
+                <svg viewBox="0 0 24 24" width="16" height="16">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2" d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
+                </svg>
+            </button>
+        </div>
+    </aside>
+
+    <main class="main-container">
+
+        <section id="seccion-hoy" class="dashboard-section active-section">
+
+            <div class="hero-greeting glass-card">
+                <div class="hero-greeting-text">
+                    <h2 id="saludo-dinamico">Buenos días 👋</h2>
+                    <p id="resumen-dia" style="color: var(--text-secondary); font-size: 1.1rem; margin-top: 0.3rem;">
+                    </p>
+                    <p id="frase-motivacional"
+                        style="font-style: italic; color: var(--accent); font-size: 0.95rem; margin-top: 0.5rem; opacity: 0.95; line-height: 1.4;">
+                    </p>
+                    <p id="fecha-hoy-text" style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.2rem;">
+                    </p>
+                </div>
+                <button id="btn-mostrar-form-hoy" class="btn btn-primary btn-large" style="white-space: nowrap;">+ Nueva
+                    Actividad</button>
+            </div>
+
+            <div class="metrics-row">
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">📋</div>
+                    <div class="metric-data">
+                        <span class="metric-value" id="metric-total">0</span>
+                        <span class="metric-label">Total</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">✅</div>
+                    <div class="metric-data">
+                        <span class="metric-value" id="metric-completadas">0</span>
+                        <span class="metric-label">Completadas</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">⏳</div>
+                    <div class="metric-data">
+                        <span class="metric-value" id="metric-pendientes">0</span>
+                        <span class="metric-label">Pendientes</span>
+                    </div>
+                </div>
+                <div class="metric-card metric-progress-card">
+                    <div class="metric-data" style="width:100%;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <span class="metric-label">Progreso del día</span>
+                            <span class="metric-value" id="metric-porcentaje" style="font-size: 1.2rem;">0%</span>
+                        </div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="progress-bar-fill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 2.5rem;">
+                <h3 style="margin-bottom: 1rem;">Tu Agenda</h3>
+                <div class="timeline" id="lista-tareas-hoy-grid">
+                </div>
+            </div>
+
+            <div id="contenedor-form-hoy" class="hidden"
+                style="margin-top: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                <div class="glass-card">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h3>Registrar Nueva Actividad</h3>
+                        <button id="btn-cerrar-form-hoy" class="btn btn-outline"
+                            style="border: none; font-size: 1.2rem;">&times;</button>
+                    </div>
+                    <form id="form-tarea-hoy" style="display: flex; flex-direction: column; gap: 1rem;">
+                        <input type="text" id="titulo-tarea-hoy" placeholder="Nombre de la actividad" required
+                            class="form-control"
+                            style="padding: 0.8rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary);">
+
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 200px;">
+                                <label
+                                    style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.3rem; display: block;">Hora
+                                    Pautada</label>
+                                <input type="time" id="hora-tarea-hoy" class="form-control"
+                                    style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary);">
+                            </div>
+                            <div style="flex: 1; min-width: 200px;">
+                                <label
+                                    style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.3rem; display: block;">Prioridad
+                                    (1-5)</label>
+                                <select id="prioridad-tarea-hoy" class="form-control"
+                                    style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary);">
+                                    <option value="1">1 - Muy Baja</option>
+                                    <option value="2">2 - Baja</option>
+                                    <option value="3" selected>3 - Media</option>
+                                    <option value="4">4 - Alta</option>
+                                    <option value="5">5 - Muy Alta</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label
+                                style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.3rem; display: block;">Proyecto</label>
+                            <select id="proyecto-tarea-hoy" class="form-control"
+                                style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary);">
+                                <option value="">Sin Proyecto</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label
+                                style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.3rem; display: block;">Descripción</label>
+                            <textarea id="descripcion-tarea-hoy" rows="2" placeholder="Detalles de la actividad..."
+                                class="form-control"
+                                style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary);"></textarea>
+                        </div>
+
+                        <div>
+                            <label
+                                style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.3rem; display: block;">Pasos
+                                internos (Checklist)</label>
+                            <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                                <input type="text" id="input-checklist-hoy" placeholder="Ej. Hacer slides, Ensayar..."
+                                    class="form-control"
+                                    style="flex: 1; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary);">
+                                <button type="button" id="btn-agregar-checklist-hoy" class="btn btn-outline"
+                                    style="padding: 0.8rem 1.2rem; font-weight: bold; border-radius: 8px;">+</button>
+                            </div>
+                            <div id="lista-checklist-previo-hoy"
+                                style="display: flex; flex-direction: column; gap: 0.4rem; padding: 0.2rem 0.5rem;">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label
+                                style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.3rem; display: block;">Notas
+                                adicionales</label>
+                            <textarea id="notas-tarea-hoy" rows="2" placeholder="Observaciones, links, etc..."
+                                class="form-control"
+                                style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary);"></textarea>
+                        </div>
+
+                        <div>
+                            <label
+                                style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.3rem; display: block;">Recordatorio</label>
+                            <select id="recordatorio-tarea-hoy" class="form-control"
+                                style="width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary);">
+                                <option value="-1">No enviar</option>
+                                <option value="0">Al momento</option>
+                                <option value="15">15 minutos antes</option>
+                                <option value="30">30 minutos antes</option>
+                                <option value="60">1 hora antes</option>
+                                <option value="1440">1 día antes</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-large"
+                            style="width: 100%; margin-top: 0.5rem;">Guardar Actividad</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section id="seccion-vencidas" class="dashboard-section hidden-section">
+            <div class="section-header">
+                <h2>Actividades Vencidas</h2>
+                <p style="color: var(--text-secondary); margin-top: 0.3rem;">Tareas pendientes de días anteriores que
+                    necesitan tu atención.</p>
+            </div>
+
+            <div style="margin-top: 2.5rem;">
+                <div class="timeline" id="lista-tareas-vencidas-grid">
+                </div>
+            </div>
+        </section>
+
+        <section id="seccion-busqueda" class="dashboard-section hidden-section">
+            <div class="section-header">
+                <h2>Resultados de Búsqueda</h2>
+                <p id="search-results-summary" style="color: var(--text-secondary); margin-top: 0.3rem;">Escribe en el
+                    buscador del navbar para encontrar actividades.</p>
+            </div>
+
+            <div style="margin-top: 2.5rem;">
+                <div class="timeline" id="lista-busqueda-grid">
+                </div>
+            </div>
+        </section>
+
+        <section id="seccion-proximo" class="dashboard-section hidden-section">
+            <div class="section-header">
+                <h2>Próximos Días</h2>
+            </div>
+
+            <div class="dashboard-grid-proximo">
+                <div class="glass-card calendar-wrapper">
+                    <div class="calendar-header">
+                        <button class="btn btn-outline" id="prev-month">&lt;</button>
+                        <h3 id="calendar-month-year">Mes Año</h3>
+                        <button class="btn btn-outline" id="next-month">&gt;</button>
+                    </div>
+
+                    <div class="calendar-grid">
+                        <div class="calendar-day-header">Dom</div>
+                        <div class="calendar-day-header">Lun</div>
+                        <div class="calendar-day-header">Mar</div>
+                        <div class="calendar-day-header">Mié</div>
+                        <div class="calendar-day-header">Jue</div>
+                        <div class="calendar-day-header">Vie</div>
+                        <div class="calendar-day-header">Sáb</div>
+                    </div>
+
+                    <div class="calendar-grid" id="calendar-days">
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h3 id="selected-date-title">Actividades del Día</h3>
+                    <form id="form-tarea-proximo"
+                        style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem;">
+                        <input type="text" id="titulo-tarea-proximo" placeholder="Nombre de la actividad futura"
+                            required class="form-control"
+                            style="padding: 0.5rem; border-radius: 4px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary);">
+
+                        <div style="display: flex; gap: 0.5rem;">
+                            <input type="time" id="hora-tarea-proximo" class="form-control"
+                                style="flex:1; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary);">
+                            <select id="prioridad-tarea-proximo" class="form-control"
+                                style="flex:1; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary);">
+                                <option value="1">Prioridad 1</option>
+                                <option value="2">Prioridad 2</option>
+                                <option value="3" selected>Prioridad 3</option>
+                                <option value="4">Prioridad 4</option>
+                                <option value="5">Prioridad 5</option>
+                            </select>
+                        </div>
+
+                        <select id="proyecto-tarea-proximo" class="form-control"
+                            style="padding: 0.5rem; border-radius: 4px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary);">
+                            <option value="">Sin Proyecto</option>
+                        </select>
+
+                        <textarea id="descripcion-tarea-proximo" rows="2" placeholder="Descripción" class="form-control"
+                            style="padding: 0.5rem; border-radius: 4px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary);"></textarea>
+
+                        <div style="margin-top: 0.5rem;">
+                            <label
+                                style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.2rem; display: block;">Pasos
+                                internos (Checklist)</label>
+                            <div style="display: flex; gap: 0.4rem; margin-bottom: 0.4rem;">
+                                <input type="text" id="input-checklist-proximo" placeholder="Ej. Revisar datos..."
+                                    class="form-control"
+                                    style="flex: 1; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary);">
+                                <button type="button" id="btn-agregar-checklist-proximo" class="btn btn-outline"
+                                    style="padding: 0.5rem 0.8rem; font-weight: bold; border-radius: 4px;">+</button>
+                            </div>
+                            <div id="lista-checklist-previo-proximo"
+                                style="display: flex; flex-direction: column; gap: 0.3rem; padding: 0.1rem 0.3rem;">
+                            </div>
+                        </div>
+
+                        <textarea id="notas-tarea-proximo" rows="2" placeholder="Notas adicionales" class="form-control"
+                            style="padding: 0.5rem; border-radius: 4px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary);"></textarea>
+
+                        <div>
+                            <label
+                                style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.3rem; display: block;">Recordatorio</label>
+                            <select id="recordatorio-tarea-proximo" class="form-control"
+                                style="width: 100%; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary);">
+                                <option value="-1">No enviar</option>
+                                <option value="0">Al momento</option>
+                                <option value="15">15 minutos antes</option>
+                                <option value="30">30 minutos antes</option>
+                                <option value="60">1 hora antes</option>
+                                <option value="1440">1 día antes</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="margin-top: 0.5rem;">Añadir a esta
+                            fecha</button>
+                    </form>
+                    <div class="item-list" id="lista-tareas-proximo" style="margin-top: 1.5rem;">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="seccion-reportes" class="dashboard-section hidden-section">
+            <div class="section-header">
+                <h2>Reportes y Estadísticas</h2>
+                <p style="color: var(--text-secondary);">Análisis completo de tu productividad</p>
+                <div class="report-actions" style="display: flex; gap: 0.8rem; margin-top: 1.2rem; flex-wrap: wrap;">
+                    <button id="btn-exportar-csv" class="btn btn-outline"
+                        style="display: inline-flex; align-items: center; gap: 0.4rem;">📥 Exportar CSV</button>
+                    <button id="btn-exportar-pdf" class="btn btn-primary"
+                        style="display: inline-flex; align-items: center; gap: 0.4rem;">📄 Exportar PDF
+                        (Reporte)</button>
+                </div>
+            </div>
+
+            <div class="metrics-row" id="reporte-metricas">
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">📊</div>
+                    <div class="metric-data">
+                        <span class="metric-value" id="rep-total-global">0</span>
+                        <span class="metric-label">Total Registradas</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">✅</div>
+                    <div class="metric-data">
+                        <span class="metric-value" id="rep-completadas-global">0</span>
+                        <span class="metric-label">Completadas</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">⏳</div>
+                    <div class="metric-data">
+                        <span class="metric-value" id="rep-pendientes-global">0</span>
+                        <span class="metric-label">Pendientes</span>
+                    </div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-icon" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">🏆</div>
+                    <div class="metric-data">
+                        <span class="metric-value" id="rep-tasa-global">0%</span>
+                        <span class="metric-label">Tasa de Éxito</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="report-charts-row">
+                <div class="glass-card report-chart-container">
+                    <h3>Estado de Tareas</h3>
+                    <div style="max-width: 280px; margin: 1rem auto;">
+                        <canvas id="chart-estado"></canvas>
+                    </div>
+                </div>
+                <div class="glass-card report-chart-container">
+                    <h3>Actividad Semanal</h3>
+                    <div style="margin: 1rem 0;">
+                        <canvas id="chart-semanal"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card" style="margin-top: 2rem;">
+                <h3>Rendimiento por Proyecto</h3>
+                <div id="reporte-proyectos-breakdown" style="margin-top: 1rem;">
+                </div>
+            </div>
+
+            <div class="glass-card" style="margin-top: 2rem;">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                    <h3>Historial de Tareas Completadas</h3>
+                    <select id="filtro-proyecto-reporte" class="form-control"
+                        style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--glass-border); background: var(--input-bg); color: var(--text-primary); min-width: 200px;">
+                        <option value="todos">Todos los proyectos</option>
+                        <option value="individuales">Sin Proyecto (Individuales)</option>
+                    </select>
+                </div>
+                <div class="item-list" id="lista-reportes"
+                    style="margin-top: 1rem; max-height: 400px; overflow-y: auto;">
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Perfil de Usuario -->
+    <div id="profile-modal" class="modal hidden">
+        <div class="modal-content glass-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                <h3>Mi Cuenta</h3>
+                <button id="close-profile-modal" class="btn btn-outline">&times;</button>
+            </div>
+
+            <form id="profile-form" style="display:flex; flex-direction:column; gap:0.6rem;">
+                <label>Nombre</label>
+                <input id="profile-nombre" type="text" class="form-control">
+                <label>Email</label>
+                <input id="profile-email" type="email" class="form-control">
+                <label>Nueva contraseña (dejar vacío para no cambiar)</label>
+                <input id="profile-password" type="password" class="form-control">
+                <label>Avatar (imagen)</label>
+                <input id="profile-avatar-file" type="file" accept="image/*" class="form-control">
+
+                <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+                    <button type="button" id="btn-save-profile" class="btn btn-primary">Guardar</button>
+                    <button type="button" id="btn-cancel-profile" class="btn btn-outline">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="task-detail-modal" class="modal hidden">
+        <div class="modal-content glass-card" id="task-modal-body">
+        </div>
+    </div>
+
+    <div id="project-modal" class="modal hidden">
+        <div class="modal-content glass-card" style="max-width: 680px;">
+            <div class="project-modal-header"
+                style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+            </div>
+
+            <div id="contenedor-form-proyecto-interno" class="hidden"
+                style="margin-bottom: 1.5rem; padding: 1.2rem 1.4rem; border-radius: 14px; border: 1px solid var(--glass-border); background: var(--input-bg);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4 style="margin: 0; color: var(--accent); font-size: 0.95rem;">✨ Nueva Actividad para este
+                        Proyecto</h4>
+                    <button id="btn-cerrar-form-proj-interno" class="btn btn-outline"
+                        style="border: none; font-size: 1rem; padding: 0.2rem 0.5rem;">&times;</button>
+                </div>
+                <form id="form-tarea-proyecto-interno" style="display: flex; flex-direction: column; gap: 0.8rem;">
+                    <input type="text" id="titulo-proj-interno" placeholder="Nombre de la actividad" required
+                        class="form-control"
+                        style="padding: 0.5rem; border-radius: 4px; border: 1px solid var(--glass-border); background: var(--bg-card); color: var(--text-primary);">
+
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="date" id="fecha-proj-interno" required class="form-control"
+                            style="flex: 1; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--glass-border); background: var(--bg-card); color: var(--text-primary);">
+                        <input type="time" id="hora-proj-interno" class="form-control"
+                            style="flex: 1; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--glass-border); background: var(--bg-card); color: var(--text-primary);">
+                    </div>
+
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                        <label
+                            style="font-size: 0.85rem; color: var(--text-secondary); white-space: nowrap;">Prioridad:</label>
+                        <select id="prioridad-proj-interno" class="form-control"
+                            style="flex: 1; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--glass-border); background: var(--bg-card); color: var(--text-primary);">
+                            <option value="1">1 - Muy Baja</option>
+                            <option value="2">2 - Baja</option>
+                            <option value="3" selected>3 - Media</option>
+                            <option value="4">4 - Alta</option>
+                            <option value="5">5 - Muy Alta</option>
+                        </select>
+                    </div>
+
+                    <textarea id="desc-proj-interno" rows="2" placeholder="Descripción de la actividad..."
+                        class="form-control"
+                        style="padding: 0.5rem; border-radius: 4px; border: 1px solid var(--glass-border); background: var(--bg-card); color: var(--text-primary);"></textarea>
+
+                    <div style="margin-top: 0.5rem;">
+                        <label
+                            style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.2rem; display: block;">Pasos
+                            internos (Checklist)</label>
+                        <div style="display: flex; gap: 0.4rem; margin-bottom: 0.4rem;">
+                            <input type="text" id="input-checklist-proyecto" placeholder="Ej. Ensayar..."
+                                class="form-control"
+                                style="flex: 1; padding: 0.5rem; border-radius: 4px; border: 1px solid var(--glass-border); background: var(--bg-card); color: var(--text-primary);">
+                            <button type="button" id="btn-agregar-checklist-proyecto" class="btn btn-outline"
+                                style="padding: 0.5rem 0.8rem; font-weight: bold; border-radius: 4px;">+</button>
+                        </div>
+                        <div id="lista-checklist-previo-proyecto"
+                            style="display: flex; flex-direction: column; gap: 0.3rem; padding: 0.1rem 0.3rem;"></div>
+                    </div>
+
+                    <textarea id="notas-proj-interno" rows="1" placeholder="Notas adicionales..." class="form-control"
+                        style="padding: 0.5rem; border-radius: 4px; border: 1px solid var(--glass-border); background: var(--bg-card); color: var(--text-primary);"></textarea>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.5rem;">Guardar
+                        Actividad en Proyecto</button>
+                </form>
+            </div>
+
+            <div style="margin-bottom: 1rem; display: flex; justify-content: flex-end;">
+                <button id="btn-mostrar-form-proj-interno" class="btn btn-primary"
+                    style="padding: 0.5rem 1.2rem; font-size: 0.85rem; border-radius: 10px; display: inline-flex; align-items: center; gap: 0.4rem;">
+                    <span style="font-size: 1.1rem; line-height: 1;">+</span> Nueva Actividad
+                </button>
+            </div>
+
+            <div id="modal-project-tasks" style="max-height: 380px; overflow-y: auto; padding-right: 0.2rem;">
+            </div>
+        </div>
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>

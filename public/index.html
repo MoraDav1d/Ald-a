@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Domina tu tiempo y organiza tu vida con Al Día. Agenda diaria premium con checklists, gestión de proyectos, tareas vencidas, rachas de productividad y reportes.">
+    <title>Al Día - Domina tu tiempo y organiza tu día a día</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/landing.css">
+</head>
+
+<body>
+    <nav class="navbar" id="landing-navbar">
+        <div class="nav-left">
+            <button class="btn btn-outline" id="theme-toggle" style="margin-right: 1rem;">🌙 Modo Oscuro</button>
+            <a href="login.html" class="btn btn-outline" id="nav-login-btn">Iniciar Sesión</a>
+            <a href="dashboard.html" class="btn btn-primary hidden" id="nav-dash-btn">Dashboard</a>
+        </div>
+        <div class="nav-center">
+            <img src="img/logo.png" alt="Al Día" class="nav-logo" id="landing-logo">
+        </div>
+        <div class="nav-right">
+            <a href="register.html" class="btn btn-primary" id="nav-reg-btn">Crear Cuenta</a>
+            <button class="btn btn-danger hidden" id="nav-logout-btn">Cerrar Sesión</button>
+        </div>
+    </nav>
+
+    <!-- Parallax Hero Section with Aurora Glow -->
+    <header class="hero-parallax">
+        <div class="hero-grid">
+            <div class="hero-text-side">
+                <h2>Domina tu tiempo, organiza tu vida.</h2>
+                <p>La herramienta definitiva para gestionar tus proyectos, tareas y notas diarias de una manera
+                    elegante, fluida y con enfoque real en tu día a día.</p>
+                <div class="hero-cta-group">
+                    <a href="register.html" class="btn btn-primary btn-large" id="hero-cta-register">Comienza Gratis</a>
+                </div>
+            </div>
+
+            <div class="hero-visual-side">
+                <!-- Widget Interactivo (Live Demo) -->
+                <div class="demo-widget" id="interactive-demo-widget">
+                    <div class="demo-header">
+                        <div class="demo-title">
+                            📅 Agenda de Hoy
+                        </div>
+                        <div class="demo-streak" title="Racha de productividad activa">
+                            <span id="demo-streak-val">🔥 4 días</span>
+                        </div>
+                    </div>
+
+                    <div class="demo-progress-bar">
+                        <div id="demo-progress-fill" class="demo-progress-fill"></div>
+                    </div>
+
+                    <div class="demo-input-group">
+                        <input type="text" id="demo-task-input" placeholder="Añade una tarea de prueba..."
+                            class="demo-input">
+                        <button id="demo-task-add-btn" class="btn btn-primary"
+                            style="padding: 0.6rem 1rem; font-weight: bold; border-radius: 6px;">+</button>
+                    </div>
+
+                    <div id="demo-tasks-list" class="demo-tasks">
+                        <!-- Tareas cargadas dinámicamente desde landing.js -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="home-main">
+        <div class="section-intro">
+            <h2>Diseñado para la Productividad Real</h2>
+            <p>Descubre las potentes herramientas integradas que te ayudan a estructurar tu jornada laboral y personal
+                con facilidad.</p>
+        </div>
+
+        <!-- Feature 1: Timeline & Drag & Drop -->
+        <section class="feature-section" id="feat-agenda">
+            <div class="feature-text">
+                <h3>📅 Planifica tu día de forma interactiva</h3>
+                <p>El corazón de Al Día es su agenda enfocada. No dejes que tus metas se diluyan en listados
+                    interminables de tareas pendientes. Agrega y ajusta tu agenda diaria en tiempo real con soporte
+                    interactivo de arrastrar y soltar.</p>
+                <p>Organiza tus actividades con prioridades nítidas y mantén siempre el enfoque en lo que toca hacer
+                    ahora mismo.</p>
+            </div>
+            <div class="feature-visual">
+                <div class="mockup-container">
+                    <div class="mock-timeline">
+                        <div class="mock-timeline-item">
+                            <span class="mock-drag-handle">⋮⋮</span>
+                            <div class="mock-timeline-dot"></div>
+                            <div class="mock-timeline-card">
+                                📝 Revisar diapositivas de presentación <span
+                                    style="color: var(--accent); font-size: 0.75rem; margin-left: 0.5rem;">(1/3
+                                    pasos)</span>
+                            </div>
+                        </div>
+                        <div class="mock-timeline-item"
+                            style="transform: scale(1.02); box-shadow: 0 4px 10px rgba(var(--accent-rgb), 0.15); border: 1px dashed var(--accent); border-radius: 6px;">
+                            <span class="mock-drag-handle" style="color: var(--accent);">⋮⋮</span>
+                            <div class="mock-timeline-dot" style="background: var(--accent);"></div>
+                            <div class="mock-timeline-card" style="background: var(--glass-bg);">
+                                📞 Reunión de alineación semanal con clientes
+                            </div>
+                        </div>
+                        <div class="mock-timeline-item">
+                            <span class="mock-drag-handle">⋮⋮</span>
+                            <div class="mock-timeline-dot"></div>
+                            <div class="mock-timeline-card">
+                                💻 Ensayar el pitch de ventas final
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature 2: Overdue Tasks (Reversed) -->
+        <section class="feature-section reverse" id="feat-vencidas">
+            <div class="feature-text">
+                <h3>⚠️ Control de Tareas Vencidas</h3>
+                <p>¿Qué pasa con las tareas de ayer que no pudiste completar? En otros gestores, simplemente desaparecen
+                    o se acumulan sin orden.</p>
+                <p>En Al Día, las tareas pendientes del pasado se mueven automáticamente a una sección dedicada de
+                    <strong>Vencidas</strong>, resaltadas con claridad para que puedas completarlas o re-calendarizarlas
+                    cuando gustes.</p>
+            </div>
+            <div class="feature-visual">
+                <div class="mockup-container">
+                    <div class="mock-overdue-container">
+                        <div class="mock-overdue-header">
+                            ⚠️ Actividades pendientes del pasado
+                        </div>
+                        <div class="mock-overdue-card">
+                            <div>
+                                <div class="mock-overdue-title">✉️ Enviar contrato firmado a contabilidad</div>
+                                <div class="mock-overdue-meta">Hace 2 días • Prioridad Alta</div>
+                            </div>
+                            <button class="mock-overdue-action">Reprogramar</button>
+                        </div>
+                        <div class="mock-overdue-card" style="border-color: rgba(239, 68, 68, 0.2); opacity: 0.85;">
+                            <div>
+                                <div class="mock-overdue-title">🔧 Actualizar servidor de staging</div>
+                                <div class="mock-overdue-meta">Ayer • Prioridad Media</div>
+                            </div>
+                            <button class="mock-overdue-action">Reprogramar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature 3: Checklists & Notes -->
+        <section class="feature-section" id="feat-checklists">
+            <div class="feature-text">
+                <h3>📝 Subtareas y Notas al Vuelo</h3>
+                <p>Las tareas grandes pueden abrumar. Desglósalas en checklists internos para medir tu progreso paso a
+                    paso. Observa cómo se actualiza la barra de progreso de tus actividades a medida que avanzas.</p>
+                <p>Además, utiliza el panel de notas rápidas para capturar ideas, recordatorios y pensamientos justo
+                    cuando llega la inspiración, sin salir de tu flujo de trabajo.</p>
+            </div>
+            <div class="feature-visual">
+                <div class="mockup-container">
+                    <div class="mock-notes-grid">
+                        <div class="mock-note-card">
+                            <div class="mock-note-title">💡 Ideas para el Blog</div>
+                            <div class="mock-note-body">
+                                • Cómo estructurar checklists eficientes.<br>
+                                • El poder de las rachas motivadoras.
+                            </div>
+                            <span class="mock-note-tag">#Creatividad</span>
+                        </div>
+                        <div class="mock-note-card">
+                            <div class="mock-note-title">✍️ Feedback de Pruebas</div>
+                            <div class="mock-note-body">
+                                • El buscador global funciona veloz.<br>
+                                • Agregar exportación CSV/PDF.
+                            </div>
+                            <span class="mock-note-tag">#Proyecto</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Glassmorphism Features Grid -->
+        <div class="section-intro" style="margin-top: 6rem; margin-bottom: 2rem;">
+            <h2>Características que Potencian tu Día</h2>
+        </div>
+
+        <div class="features-grid">
+            <div class="glass-feature-card">
+                <span class="feature-icon">🔥</span>
+                <h4>Rachas de Productividad</h4>
+                <p>Gamifica tu rutina. Mantén encendido tu indicador de racha completando todas tus actividades
+                    asignadas del día.</p>
+            </div>
+            <div class="glass-feature-card">
+                <span class="feature-icon">📥</span>
+                <h4>Exportación en 1 Clic</h4>
+                <p>Descarga estadísticas de tus proyectos y tareas en CSV optimizado para Excel o en reportes PDF
+                    vectoriales listos para imprimir.</p>
+            </div>
+            <div class="glass-feature-card">
+                <span class="feature-icon">🎨</span>
+                <h4>Modo Claro y Oscuro</h4>
+                <p>Cambia instantáneamente la estética para adaptarte al día o a la noche. Un diseño armónico que reduce
+                    el cansancio visual.</p>
+            </div>
+            <div class="glass-feature-card">
+                <span class="feature-icon">🔔</span>
+                <h4>Avisos Inteligentes</h4>
+                <p>Configura recordatorios con alertas nativas y no pierdas de vista ninguna reunión o tarea crucial
+                    programada.</p>
+            </div>
+        </div>
+
+        <!-- FAQs Accordion -->
+        <section class="faq-section" id="faq-landing">
+            <h2 style="text-align: center; margin-bottom: 1.5rem; font-size: 2.2rem; font-weight: 800;">Preguntas
+                Frecuentes</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>¿Qué es Al Día y en qué se diferencia?</span>
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        Al Día es una agenda inteligente enfocada en el hoy. Combina checklists dentro de actividades,
+                        gestión de proyectos ordenados, alertas nativas, notas al vuelo y un historial de tareas
+                        vencidas para asegurar que nada quede olvidado sin saturar tu vista diaria.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>¿Cómo funciona el sistema de Tareas Vencidas?</span>
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        Si tienes una tarea de ayer u otro día del pasado que no lograste marcar como completada, se
+                        moverá de forma automática a la sección de "Vencidas" en tu panel lateral. Esto mantiene limpia
+                        tu lista de "Hoy" pero te da un espacio seguro para resolver pendientes atrasados.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>¿Mis datos están seguros en la aplicación?</span>
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        ¡Totalmente! Al Día utiliza una base de datos local rápida y estructurada. Tu información de
+                        inicio de sesión y datos personales se procesan de forma privada y segura en tu propia
+                        instalación.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>¿Puedo exportar mi información para mi trabajo?</span>
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        Sí. Desde la sección de Reportes del dashboard, puedes exportar un documento CSV perfectamente
+                        formateado para Excel/Google Sheets, o generar un reporte visual imprimible en formato PDF con
+                        gráficos de rendimiento y tablas de proyectos en un solo clic.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action Final -->
+        <section class="cta-final" id="final-cta-section">
+            <h2>¿Listo para organizar tu tiempo?</h2>
+            <p>Únete a miles de personas que ordenan sus días con Al Día y eleva tu productividad al máximo nivel.</p>
+            <a href="register.html" class="btn btn-primary btn-large" id="final-cta-btn">Crear Cuenta Gratis</a>
+        </section>
+    </main>
+
+    <footer
+        style="text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--glass-border); color: var(--text-secondary); background: var(--bg-color);">
+        <p style="margin-bottom: 0.5rem;">&copy; 2026 Al Día. Todos los derechos reservados.</p>
+        <p style="font-size: 0.85rem; opacity: 0.7;">Organizador personal premium para proyectos, checklists y notas
+            rápidas.</p>
+    </footer>
+
+    <script src="js/theme.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/landing.js"></script>
+</body>
+
+</html>
