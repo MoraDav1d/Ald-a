@@ -99,8 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Notificación de racha muerta
     function checkStreakNotification() {
         try {
+            if (!usuario) return;
             const currentRacha = calcularRacha(globalTareas);
-            const last = Number(localStorage.getItem('aldia_last_racha') || '0');
+            const last = Number(localStorage.getItem(`aldia_last_racha_${usuario.id}`) || '0');
             if (currentRacha > last) {
                 // Racha aumentó
                 mostrarToastInterno({
@@ -137,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 playChime('error');
             }
             // Actualizar registro
-            localStorage.setItem('aldia_last_racha', String(currentRacha));
+            localStorage.setItem(`aldia_last_racha_${usuario.id}`, String(currentRacha));
         } catch (err) { console.error('Error checking streak', err); }
     }
 
@@ -3536,7 +3537,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 sidebarStreak.innerHTML = `
                     <span style="font-size:1.5rem;">🔥</span>
                     <div style="display:flex; flex-direction:column; gap:0.1rem;">
-                        <span style="font-size:0.7rem; text-transform:uppercase; font-weight:600; opacity:0.9; letter-spacing:0.05em;">Racha Inactiva</span>
+                        <span style="font-size:0.7rem; text-transform:uppercase; font-weight:600; opacity:0.9; letter-spacing:0.05em;">Racha Actual</span>
                         <span class="streak-val" style="font-size:1.2rem; font-weight:800;">0 días</span>
                     </div>
                 `;
@@ -3565,7 +3566,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
             } else {
                 heroStreak.className = 'streak-hero-pill inactive';
-                heroStreak.innerHTML = `🔥 Racha Inactiva (0 días) - Ver historial`;
+                heroStreak.innerHTML = `🔥 La racha actual es 0 - Ver historial`;
                 heroStreak.style.display = 'inline-block';
                 heroStreak.style.cursor = 'pointer';
                 heroStreak.title = "Ver mi historial de racha 🔥";
